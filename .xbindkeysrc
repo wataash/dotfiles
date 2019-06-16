@@ -1,0 +1,612 @@
+# Apply config: killall xbindkeys; xbindkeys
+
+# Debugging
+# "kdialog --msgbox $0"
+# "kdialog --msgbox $(ps -p $$ | tr ' ' '_' | tr '\n' '+')"
+# "a=$(xdotool getactivewindow getwindowname | tr ' ' '_'); kdialog --msgbox $a"
+#"a=$(ls | tr ' ' '_'); kdialog --msgbox $a"
+#  m:0x02 + c:56
+# caps + b
+"xbindkeys_show"
+  control+shift + q
+
+
+keystate_numlock = enable
+keystate_capslock = enable
+keystate_scrolllock= enable
+
+
+# for debugging.  If dialog appears, syntax above this line is ok.
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+      )'; killall xbindkeys; xbindkeys"
+  m:0x02 +        + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x01)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x01 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x04)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x04 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x05)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x05 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x08)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x08 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x09)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x09 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x0c)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x0c + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x0d)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x0d + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x2+m:0x40)'; killall xbindkeys; xbindkeys"
+  m:0x02 + m:0x40 + z
+
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+      )'; killall xbindkeys; xbindkeys"
+  m:0x20          + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x01)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x01 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x04)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x04 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x05)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x05 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x08)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x08 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x09)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x09 + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x0c)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x0c + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x0d)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x0d + z
+"kdialog --msgbox 'restarting xbindkeys (m:0x20+m:0x40)'; killall xbindkeys; xbindkeys"
+  m:0x20 + m:0x40 + z
+
+
+# modifiers can be found by `xbindkeys -mk`
+# 0x1 Shift
+# 0x2 Caps_Lock
+# 0x4 Control
+# 0x8 Alt (Mod1)
+# 0x10 Mod2 (numlock)
+# 0x20 Mod3
+# 0x40 Mod4 (Super)
+# 0x80 Mod5 (altgr)
+
+# caps+super doesn''t work.
+
+
+
+# "keydown m:0x01" について
+# "keydown Control" だと、無変換キーをリリースしてもctrlが押されっぱなしになってしまう。
+# 物理ctrlをクリックすると直る。
+# 無変換キーをリリースすると、"keyup m:0x01" はするが "keyup Control" はしないらしい。
+
+# emacs key bindings
+
+# caps + a
+"sleep 0; xdotool keyup a key Home"
+  m:0x02          + c:38  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x01+Home      keydown m:0x01"
+  m:0x02 + m:0x01 + c:38  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x04+Home      keydown m:0x04"
+  m:0x02 + m:0x04 + c:38  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x05+Home      keydown m:0x05"
+  m:0x02 + m:0x05 + c:38  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x08+Home      keydown m:0x08"
+  m:0x02 + m:0x08 + c:38  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x09+Home      keydown m:0x09"
+  m:0x02 + m:0x09 + c:38  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x0c+Home      keydown m:0x0c"
+  m:0x02 + m:0x0c + c:38  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x0d+Home      keydown m:0x0d"
+  m:0x02 + m:0x0d + c:38  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup a key m:0x40+Home      keydown m:0x40"
+  m:0x02 + m:0x40 + c:38  #                   Super ^^^^^^^^^^
+
+# caps + b
+"sleep 0; xdotool keyup b key Left"
+  m:0x02          + c:56  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x01+Left      keydown m:0x01"
+  m:0x02 + m:0x01 + c:56  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x04+Left      keydown m:0x04"
+  m:0x02 + m:0x04 + c:56  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x05+Left      keydown m:0x05"
+  m:0x02 + m:0x05 + c:56  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x08+Left      keydown m:0x08"
+  m:0x02 + m:0x08 + c:56  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x09+Left      keydown m:0x09"
+  m:0x02 + m:0x09 + c:56  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x0c+Left      keydown m:0x0c"
+  m:0x02 + m:0x0c + c:56  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x0d+Left      keydown m:0x0d"
+  m:0x02 + m:0x0d + c:56  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup b key m:0x40+Left      keydown m:0x40"
+  m:0x02 + m:0x40 + c:56  #                   Super ^^^^^^^^^^
+
+# caps + c, my preference
+"sleep 0; xdotool keyup c key Page_Up"
+  m:0x02          + c:54  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x01+Page_Up   keydown m:0x01"
+  m:0x02 + m:0x01 + c:54  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x04+Page_Up   keydown m:0x04"
+  m:0x02 + m:0x04 + c:54  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x05+Page_Up   keydown m:0x05"
+  m:0x02 + m:0x05 + c:54  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x08+Page_Up   keydown m:0x08"
+  m:0x02 + m:0x08 + c:54  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x09+Page_Up   keydown m:0x09"
+  m:0x02 + m:0x09 + c:54  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x0c+Page_Up   keydown m:0x0c"
+  m:0x02 + m:0x0c + c:54  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x0d+Page_Up   keydown m:0x0d"
+  m:0x02 + m:0x0d + c:54  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup c key m:0x40+Page_Up   keydown m:0x40"
+  m:0x02 + m:0x40 + c:54  #                   Super ^^^^^^^^^^
+
+# caps + d
+"sleep 0; xdotool keyup d key Delete"
+  m:0x02          + c:40  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x01+Delete    keydown m:0x01"
+  m:0x02 + m:0x01 + c:40  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x04+Delete    keydown m:0x04"
+  m:0x02 + m:0x04 + c:40  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x05+Delete    keydown m:0x05"
+  m:0x02 + m:0x05 + c:40  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x08+Delete    keydown m:0x08"
+  m:0x02 + m:0x08 + c:40  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x09+Delete    keydown m:0x09"
+  m:0x02 + m:0x09 + c:40  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x0c+Delete    keydown m:0x0c"
+  m:0x02 + m:0x0c + c:40  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x0d+Delete    keydown m:0x0d"
+  m:0x02 + m:0x0d + c:40  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup d key m:0x40+Delete    keydown m:0x40"
+  m:0x02 + m:0x40 + c:40  #                   Super ^^^^^^^^^^
+
+# caps + e
+"sleep 0; xdotool keyup e key End"
+  m:0x02          + c:26  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x01+End       keydown m:0x01"
+  m:0x02 + m:0x01 + c:26  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x04+End       keydown m:0x04"
+  m:0x02 + m:0x04 + c:26  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x05+End       keydown m:0x05"
+  m:0x02 + m:0x05 + c:26  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x08+End       keydown m:0x08"
+  m:0x02 + m:0x08 + c:26  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x09+End       keydown m:0x09"
+  m:0x02 + m:0x09 + c:26  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x0c+End       keydown m:0x0c"
+  m:0x02 + m:0x0c + c:26  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x0d+End       keydown m:0x0d"
+  m:0x02 + m:0x0d + c:26  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup e key m:0x40+End       keydown m:0x40"
+  m:0x02 + m:0x40 + c:26  #                   Super ^^^^^^^^^^
+
+# caps + f
+"sleep 0; xdotool keyup f key Right"
+  m:0x02          + c:41  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x01+Right     keydown m:0x01"
+  m:0x02 + m:0x01 + c:41  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x04+Right     keydown m:0x04"
+  m:0x02 + m:0x04 + c:41  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x05+Right     keydown m:0x05"
+  m:0x02 + m:0x05 + c:41  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x08+Right     keydown m:0x08"
+  m:0x02 + m:0x08 + c:41  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x09+Right     keydown m:0x09"
+  m:0x02 + m:0x09 + c:41  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x0c+Right     keydown m:0x0c"
+  m:0x02 + m:0x0c + c:41  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x0d+Right     keydown m:0x0d"
+  m:0x02 + m:0x0d + c:41  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup f key m:0x40+Right     keydown m:0x40"
+  m:0x02 + m:0x40 + c:41  #                   Super ^^^^^^^^^^
+
+# caps + g
+"sleep 0; xdotool keyup g key Escape"
+  m:0x02          + c:42  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x01+Escape    keydown m:0x01"
+  m:0x02 + m:0x01 + c:42  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x04+Escape    keydown m:0x04"
+  m:0x02 + m:0x04 + c:42  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x05+Escape    keydown m:0x05"
+  m:0x02 + m:0x05 + c:42  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x08+Escape    keydown m:0x08"
+  m:0x02 + m:0x08 + c:42  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x09+Escape    keydown m:0x09"
+  m:0x02 + m:0x09 + c:42  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x0c+Escape    keydown m:0x0c"
+  m:0x02 + m:0x0c + c:42  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x0d+Escape    keydown m:0x0d"
+  m:0x02 + m:0x0d + c:42  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup g key m:0x40+Escape    keydown m:0x40"
+  m:0x02 + m:0x40 + c:42  #                   Super ^^^^^^^^^^
+
+# caps + h
+"sleep 0; xdotool keyup h key BackSpace"
+  m:0x02          + c:43  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x01+BackSpace keydown m:0x01"
+  m:0x02 + m:0x01 + c:43  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x04+BackSpace keydown m:0x04"
+  m:0x02 + m:0x04 + c:43  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x05+BackSpace keydown m:0x05"
+  m:0x02 + m:0x05 + c:43  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x08+BackSpace keydown m:0x08"
+  m:0x02 + m:0x08 + c:43  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x09+BackSpace keydown m:0x09"
+  m:0x02 + m:0x09 + c:43  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x0c+BackSpace keydown m:0x0c"
+  m:0x02 + m:0x0c + c:43  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x0d+BackSpace keydown m:0x0d"
+  m:0x02 + m:0x0d + c:43  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x40+BackSpace keydown m:0x40"
+  m:0x02 + m:0x40 + c:43  #                   Super ^^^^^^^^^^
+
+# caps + i
+"sleep 0; xdotool keyup i key Tab"
+  m:0x02          + c:31  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x01+Tab       keydown m:0x01"
+  m:0x02 + m:0x01 + c:31  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x04+Tab       keydown m:0x04"
+  m:0x02 + m:0x04 + c:31  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x05+Tab       keydown m:0x05"
+  m:0x02 + m:0x05 + c:31  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x08+Tab       keydown m:0x08"
+  m:0x02 + m:0x08 + c:31  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x09+Tab       keydown m:0x09"
+  m:0x02 + m:0x09 + c:31  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x0c+Tab       keydown m:0x0c"
+  m:0x02 + m:0x0c + c:31  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x0d+Tab       keydown m:0x0d"
+  m:0x02 + m:0x0d + c:31  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x40+Tab       keydown m:0x40"
+  m:0x02 + m:0x40 + c:31  #                   Super ^^^^^^^^^^
+
+# caps + j
+"sleep 0; xdotool keyup j key Return"
+  m:0x02          + c:44  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x01+Return    keydown m:0x01"
+  m:0x02 + m:0x01 + c:44  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x04+Return    keydown m:0x04"
+  m:0x02 + m:0x04 + c:44  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x05+Return    keydown m:0x05"
+  m:0x02 + m:0x05 + c:44  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x08+Return    keydown m:0x08"
+  m:0x02 + m:0x08 + c:44  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x09+Return    keydown m:0x09"
+  m:0x02 + m:0x09 + c:44  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0c+Return    keydown m:0x0c"
+  m:0x02 + m:0x0c + c:44  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0d+Return    keydown m:0x0d"
+  m:0x02 + m:0x0d + c:44  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x40+Return    keydown m:0x40"
+  m:0x02 + m:0x40 + c:44  #                   Super ^^^^^^^^^^
+
+# k is special
+
+# l
+
+# caps + m
+"sleep 0; xdotool keyup j key Return"
+  m:0x02          + c:58  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x01+Return    keydown m:0x01"
+  m:0x02 + m:0x01 + c:58  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x04+Return    keydown m:0x04"
+  m:0x02 + m:0x04 + c:58  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x05+Return    keydown m:0x05"
+  m:0x02 + m:0x05 + c:58  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x08+Return    keydown m:0x08"
+  m:0x02 + m:0x08 + c:58  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x09+Return    keydown m:0x09"
+  m:0x02 + m:0x09 + c:58  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0c+Return    keydown m:0x0c"
+  m:0x02 + m:0x0c + c:58  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0d+Return    keydown m:0x0d"
+  m:0x02 + m:0x0d + c:58  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x40+Return    keydown m:0x40"
+  m:0x02 + m:0x40 + c:58  #                   Super ^^^^^^^^^^
+
+# caps + n
+"sleep 0; xdotool keyup n key Down"
+  m:0x02          + c:57  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x01+Down      keydown m:0x01"
+  m:0x02 + m:0x01 + c:57  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x04+Down      keydown m:0x04"
+  m:0x02 + m:0x04 + c:57  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x05+Down      keydown m:0x05"
+  m:0x02 + m:0x05 + c:57  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x08+Down      keydown m:0x08"
+  m:0x02 + m:0x08 + c:57  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x09+Down      keydown m:0x09"
+  m:0x02 + m:0x09 + c:57  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x0c+Down      keydown m:0x0c"
+  m:0x02 + m:0x0c + c:57  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x0d+Down      keydown m:0x0d"
+  m:0x02 + m:0x0d + c:57  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x40+Down      keydown m:0x40"
+  m:0x02 + m:0x40 + c:57  #                   Super ^^^^^^^^^^
+
+# o is special
+
+# caps + p
+"sleep 0; xdotool keyup p key Up"
+  m:0x02          + c:33  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x01+Up        keydown m:0x01"
+  m:0x02 + m:0x01 + c:33  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x04+Up        keydown m:0x04"
+  m:0x02 + m:0x04 + c:33  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x05+Up        keydown m:0x05"
+  m:0x02 + m:0x05 + c:33  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x08+Up        keydown m:0x08"
+  m:0x02 + m:0x08 + c:33  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x09+Up        keydown m:0x09"
+  m:0x02 + m:0x09 + c:33  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x0c+Up        keydown m:0x0c"
+  m:0x02 + m:0x0c + c:33  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x0d+Up        keydown m:0x0d"
+  m:0x02 + m:0x0d + c:33  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup p key m:0x40+Up        keydown m:0x40"
+  m:0x02 + m:0x40 + c:33  #                   Super ^^^^^^^^^^
+
+# q, r, s, t
+
+# u is special
+
+# caps + v
+"sleep 0; xdotool keyup v key Page_Down"
+  m:0x02          + c:55  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x01+Page_Down keydown m:0x01"
+  m:0x02 + m:0x01 + c:55  # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x04+Page_Down keydown m:0x04"
+  m:0x02 + m:0x04 + c:55  #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x05+Page_Down keydown m:0x05"
+  m:0x02 + m:0x05 + c:55  # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x08+Page_Down keydown m:0x08"
+  m:0x02 + m:0x08 + c:55  #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x09+Page_Down keydown m:0x09"
+  m:0x02 + m:0x09 + c:55  # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x0c+Page_Down keydown m:0x0c"
+  m:0x02 + m:0x0c + c:55  #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x0d+Page_Down keydown m:0x0d"
+  m:0x02 + m:0x0d + c:55  # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup v key m:0x40+Page_Down keydown m:0x40"
+  m:0x02 + m:0x40 + c:55  #                   Super ^^^^^^^^^^
+
+# w is special
+
+# x, y, z
+
+# -----------------------------------------------------------------------------
+
+# specials
+
+# caps + o to toggle input source
+# kdialog --msgbox $a" 
+# win10_[Running]_-_Oracle_VM_VirtualBox -> VirtualBox
+"a=$(xdotool getactivewindow getwindowname | tr ' ' '_'); a=${a#*Oracle_VM_}; if [ $a = VirtualBox ] ; then xdotool keyup o key Zenkaku_Hankaku; else xdotool keyup o key Super+space; fi"
+  m:0x02 + o
+
+# caps + k
+"sleep 0; xdotool keyup k key Shift+End key BackSpace"
+  m:0x02 + c:45
+
+# caps + u
+"sleep 0; xdotool keyup u key Shift+Home key Delete"
+  m:0x02 + c:30
+
+# caps + w
+"sleep 0; xdotool keyup w key Control+BackSpace"
+  m:0x02 + c:25
+
+# -----------------------------------------------------------------------------
+
+# Henkan diamond cursors
+
+# h
+"sleep 0; xdotool keyup h key Page_Up"
+  m:0x20          + h     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x01+Page_Up   keydown m:0x01"
+  m:0x20 + m:0x01 + h     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x04+Page_Up   keydown m:0x04"
+  m:0x20 + m:0x04 + h     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x05+Page_Up   keydown m:0x05"
+  m:0x20 + m:0x05 + h     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x08+Page_Up   keydown m:0x08"
+  m:0x20 + m:0x08 + h     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x09+Page_Up   keydown m:0x09"
+  m:0x20 + m:0x09 + h     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x0c+Page_Up   keydown m:0x0c"
+  m:0x20 + m:0x0c + h     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x0d+Page_Up   keydown m:0x0d"
+  m:0x20 + m:0x0d + h     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup h key m:0x40+Page_Up   keydown m:0x40"
+  m:0x20 + m:0x40 + h     #                   Super ^^^^^^^^^^
+
+# i
+"sleep 0; xdotool keyup i key Up"
+  m:0x20          + i     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x01+Up        keydown m:0x01"
+  m:0x20 + m:0x01 + i     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x04+Up        keydown m:0x04"
+  m:0x20 + m:0x04 + i     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x05+Up        keydown m:0x05"
+  m:0x20 + m:0x05 + i     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x08+Up        keydown m:0x08"
+  m:0x20 + m:0x08 + i     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x09+Up        keydown m:0x09"
+  m:0x20 + m:0x09 + i     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x0c+Up        keydown m:0x0c"
+  m:0x20 + m:0x0c + i     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x0d+Up        keydown m:0x0d"
+  m:0x20 + m:0x0d + i     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup i key m:0x40+Up        keydown m:0x40"
+  m:0x20 + m:0x40 + i     #                   Super ^^^^^^^^^^
+
+# j
+"sleep 0; xdotool keyup j key Left"
+  m:0x20          + j     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x01+Left      keydown m:0x01"
+  m:0x20 + m:0x01 + j     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x04+Left      keydown m:0x04"
+  m:0x20 + m:0x04 + j     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x05+Left      keydown m:0x05"
+  m:0x20 + m:0x05 + j     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x08+Left      keydown m:0x08"
+  m:0x20 + m:0x08 + j     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x09+Left      keydown m:0x09"
+  m:0x20 + m:0x09 + j     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0c+Left      keydown m:0x0c"
+  m:0x20 + m:0x0c + j     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x0d+Left      keydown m:0x0d"
+  m:0x20 + m:0x0d + j     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup j key m:0x40+Left      keydown m:0x40"
+  m:0x20 + m:0x40 + j     #                   Super ^^^^^^^^^^
+
+# k
+"sleep 0; xdotool keyup k key Down"
+  m:0x20          + k     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x01+Down      keydown m:0x01"
+  m:0x20 + m:0x01 + k     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x04+Down      keydown m:0x04"
+  m:0x20 + m:0x04 + k     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x05+Down      keydown m:0x05"
+  m:0x20 + m:0x05 + k     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x08+Down      keydown m:0x08"
+  m:0x20 + m:0x08 + k     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x09+Down      keydown m:0x09"
+  m:0x20 + m:0x09 + k     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x0c+Down      keydown m:0x0c"
+  m:0x20 + m:0x0c + k     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x0d+Down      keydown m:0x0d"
+  m:0x20 + m:0x0d + k     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup k key m:0x40+Down      keydown m:0x40"
+  m:0x20 + m:0x40 + k     #                   Super ^^^^^^^^^^
+
+# l
+"sleep 0; xdotool keyup l key Right"
+  m:0x20          + l     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x01+Right     keydown m:0x01"
+  m:0x20 + m:0x01 + l     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x04+Right     keydown m:0x04"
+  m:0x20 + m:0x04 + l     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x05+Right     keydown m:0x05"
+  m:0x20 + m:0x05 + l     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x08+Right     keydown m:0x08"
+  m:0x20 + m:0x08 + l     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x09+Right     keydown m:0x09"
+  m:0x20 + m:0x09 + l     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x0c+Right     keydown m:0x0c"
+  m:0x20 + m:0x0c + l     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x0d+Right     keydown m:0x0d"
+  m:0x20 + m:0x0d + l     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup l key m:0x40+Right     keydown m:0x40"
+  m:0x20 + m:0x40 + l     #                   Super ^^^^^^^^^^
+
+# n
+"sleep 0; xdotool keyup n key Page_Down"
+  m:0x20          + n     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x01+Page_Down keydown m:0x01"
+  m:0x20 + m:0x01 + n     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x04+Page_Down keydown m:0x04"
+  m:0x20 + m:0x04 + n     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x05+Page_Down keydown m:0x05"
+  m:0x20 + m:0x05 + n     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x08+Page_Down keydown m:0x08"
+  m:0x20 + m:0x08 + n     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x09+Page_Down keydown m:0x09"
+  m:0x20 + m:0x09 + n     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x0c+Page_Down keydown m:0x0c"
+  m:0x20 + m:0x0c + n     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x0d+Page_Down keydown m:0x0d"
+  m:0x20 + m:0x0d + n     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup n key m:0x40+Page_Down keydown m:0x40"
+  m:0x20 + m:0x40 + n     #                   Super ^^^^^^^^^^
+
+# u
+"sleep 0; xdotool keyup u key Home"
+  m:0x20          + u     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x01+Home   keydown m:0x01"
+  m:0x20 + m:0x01 + u     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x04+Home   keydown m:0x04"
+  m:0x20 + m:0x04 + u     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x05+Home   keydown m:0x05"
+  m:0x20 + m:0x05 + u     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x08+Home   keydown m:0x08"
+  m:0x20 + m:0x08 + u     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x09+Home   keydown m:0x09"
+  m:0x20 + m:0x09 + u     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x0c+Home   keydown m:0x0c"
+  m:0x20 + m:0x0c + u     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x0d+Home   keydown m:0x0d"
+  m:0x20 + m:0x0d + u     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup u key m:0x40+Home   keydown m:0x40"
+  m:0x20 + m:0x40 + u     #                   Super ^^^^^^^^^^
+
+# o
+"sleep 0; xdotool keyup o key End"
+  m:0x20          + o     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x01+End keydown m:0x01"
+  m:0x20 + m:0x01 + o     # Shift ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x04+End keydown m:0x04"
+  m:0x20 + m:0x04 + o     #       Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x05+End keydown m:0x05"
+  m:0x20 + m:0x05 + o     # Shift+Control ^^^^^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x08+End keydown m:0x08"
+  m:0x20 + m:0x08 + o     #               Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x09+End keydown m:0x09"
+  m:0x20 + m:0x09 + o     # Shift        +Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x0c+End keydown m:0x0c"
+  m:0x20 + m:0x0c + o     #       Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x0d+End keydown m:0x0d"
+  m:0x20 + m:0x0d + o     # Shift+Control+Alt ^^^^^^^^^^^^^^^^
+"sleep 0; xdotool keyup o key m:0x40+End keydown m:0x40"
+  m:0x20 + m:0x40 + o     #                   Super ^^^^^^^^^^
+
+
+# -----------------------------------------------------------------------------
+
+# # invlid syntax.  caps lock doesn''t have its alias?
+# #"kdialog --msgbox lock+a"
+# #  lock + a
+# 
+# # it works!
+# "kdialog --msgbox lock+a"
+#   m:0x02 + c:38
+# 
+# # alt, doesn''t work
+# "kdialog --msgbox mod1+a"
+#   mod1 + a
+# 
+# # muhenkan, works! (needs keystate_numlock = enable)
+# "kdialog --msgbox mod2+a"
+#   mod2 + a
+# 
+# # henkaan, works!
+# "kdialog --msgbox mod3+a"
+#   mod3 + a
+# 
+# # super, doesn''t work
+# "kdialog --msgbox mod4+a"
+#   mod4 + a
+# 
+# # katakana-hiragana, works!
+# "kdialog --msgbox mod5+a"
+#   mod5 + a
+
+# -----------------------------------------------------------------------------
+
+# Examples of commands:
+
+# set directly keycode (here control + f with my keyboard)
+#"xterm"
+#  c:41 + m:0x4
+
+#"xterm -geom 50x20+20+20"
+#   Shift+Mod2+alt + s
+#
+## set directly keycode (here control+alt+mod2 + f with my keyboard)
+#"xterm"
+#  alt + c:0x29 + m:4 + mod2
+
+
+# -----------------------------------------------------------------------------
+
+# See also
+# xbindkeys -d
+# xbindkeys(1)
+# xvkbd(1)
