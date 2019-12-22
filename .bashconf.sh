@@ -1,214 +1,172 @@
 #!/bin/bash
-#
-# TODO: move to tessh
-#
-# TODO: shellcheck
-#
-# -----------------------------------------------------------------------------
-# My bash configurations.
-#
-# Source me from .bash_profile:
-#   source ~/.bashconf.sh
-# If ~/.bash_profile doesn't exist, source me from ~/.bashrc.
-#
-# -----------------------------------------------------------------------------
-# Environment variables (inputs)
-#
-# - BASHCONF_LOG_OUT   If 1, output log to stdout.
-#                      Example:
-#                        env BASHCONF_LOUG_OUT=1 bash
-# - BASHCONF_LOG_ERR   If 1, output log to stderr.
-# - BASHCONF_NO_ALL    If 1, this script does nothing.
-#                      Example:
-#                        env DONT_SOURCE_BASHCONF_SH=1 gnome-terminal
-# - BASHCONF_NO_ENV    If 1, doesn't set environment variables.
-# - BASHCONF_NO_FISH   If 1, doesn't run fish.
-#
-# Environment variables (outputs)
-#
-# - BASHCONF_SOURCED   If this script sets environment variables, export it as
-#                      1.
-# -----------------------------------------------------------------------------
-# Login- vs Non-Login- shells
-#
-#               macOS  Ubuntu(Unity)
-# New terminal  login  non-login
-# ssh           TODO   login
-# emacs         TODO   TODO
-# -----------------------------------------------------------------------------
-# Coding style
-#
-# Follows Google's Shell Style Guide.
-# https://google.github.io/styleguide/shell.xml
-# -----------------------------------------------------------------------------
-# Misc
-#
-# - If you want to run bash in clean environment, just remove
-#   `source ~/.bashconf.sh`.
-# - If ~/.bash_profile doesn't exist, both login- and non-login- shell reads
-#   ~/.bashrc.
-# -----------------------------------------------------------------------------
 
-#######################################
+# https://scrapbox.io/wataash/.bashconf.sh
+
+# follow shellcheck
+# https://github.com/koalaman/shellcheck
+
+set -u
+
+# ------------------------------------------------------------------------------
+# usage
+
+# source me from .bash_profile:
+#   source ~/.bashconf.sh
+# if ~/.bash_profile doesn't exist, source me from ~/.bashrc
+
+# ------------------------------------------------------------------------------
+# logging
+
+# echo_black()  { tput setaf 0 ; echo "$@" ; tput sgr0 ; }
+# echo_red()    { tput setaf 1 ; echo "$@" ; tput sgr0 ; }
+# echo_green()  { tput setaf 2 ; echo "$@" ; tput sgr0 ; }
+# echo_yellow() { tput setaf 3 ; echo "$@" ; tput sgr0 ; }
+# echo_blue()   { tput setaf 4 ; echo "$@" ; tput sgr0 ; }
+# echo_purple() { tput setaf 5 ; echo "$@" ; tput sgr0 ; }
+# echo_cyan()   { tput setaf 6 ; echo "$@" ; tput sgr0 ; }
+# echo_white()  { tput setaf 7 ; echo "$@" ; tput sgr0 ; }
+
 # https://google.github.io/styleguide/shell.xml?showone=STDOUT_vs_STDERR#STDOUT_vs_STDERR
-# Globals:
-#   None
-# Arguments:
-#   None
-# Returns:
-#   None
-#######################################
-wataash::conf::err() {
-  # TODO: debug level
-  echo "$[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
+_log() {
+  echo -n "$(date +'%Y-%m-%d %H:%M:%S')"
+  # 108 set_env_path /home/wsh/.bashconf.sh
+  printf ' %20s %3d  ' "${FUNCNAME[2]}" ${BASH_LINENO[1]}
+  echo "  $*"
+
+  # echo "${FUNCNAME[0]}"   # _log
+  # echo "${FUNCNAME[1]}"   # debug
+  # echo "${FUNCNAME[2]}"   # set_env
+  # echo $LINENO            # lineno for here
+  # echo ${BASH_LINENO[0]}  # lineno in debug
+  # echo ${BASH_LINENO[1]}  # lineno in set_env
+
+  # echo "caller  : $(caller)"    # caller  : 91 /home/wsh/.bashconf.sh
+  # echo "caller 0: $(caller 0)"  # caller 0: 91 debug /home/wsh/.bashconf.sh
+  # echo "caller 1: $(caller 1)"  # caller 1: 299 should_run_fish /home/wsh/.bashconf.sh
+  # echo "caller 2: $(caller 2)"  # caller 2: 314 run_fish /home/wsh/.bashconf.sh
+  # echo "caller 3: $(caller 3)"  # caller 3: 355 source /home/wsh/.bashconf.sh
 }
 
-#######################################
-# All the functions must call me at first:
-#
-#   wataash::conf::func() {
-#     wataash::conf::log("Short description of this function.")
-#     x=1
+LOGFILE=/tmp/wataash/bashconf.log
+
+# all functions must call debug() first:
+#   func() {
+#     debug
 #     ...
 #   }
-#
-# Globals:
-#   None
-# Arguments:
-#   None
-# Returns:
-#   None
-#######################################
-wataash::conf::log() {
-  mkdir -p /tmp/wataash/
-  log_date="[$(date +'%Y-%m-%d %H:%M:%S')]"
-  log_caller="$(printf '%3s %-30s%.1s' $(caller 0)) $@"
-  echo "$log_date $log_caller" >> /tmp/wataash/bashconf.log
+err()   {         { tput setaf 1 ; _log "$@" ; tput sgr0 ; } | tee -a $LOGFILE >&2 ; }
+warn()  {         { tput setaf 3 ; _log "$@" ; tput sgr0 ; } | tee -a $LOGFILE >&2 ; }
+info()  { return; { tput setaf 4 ; _log "$@" ; tput sgr0 ; } | tee -a $LOGFILE >&2 ; }
+debug() { return; { tput setaf 7 ; _log "$@" ; tput sgr0 ; } | tee -a $LOGFILE >&2 ; }
 
-  if [ "$BASHCONF_LOG_OUT" = 1 ]; then
-    echo "$log_date $log_caller" 
-  fi
-  if [ "$BASHCONF_LOG_ERR" = 1 ]; then
-    echo "$log_date $log_caller" >&2
-  fi
+if [ "$0" = "/etc/gdm3/Xsession" ]; then
+# avoid >&2 ; at Ubuntu login (gdm3), error dialog appears if any stderr
+err()   {         { tput setaf 1 ; _log "$@" ; tput sgr0 ; } >> $LOGFILE ; }
+warn()  {         { tput setaf 3 ; _log "$@" ; tput sgr0 ; } >> $LOGFILE ; }
+info()  {         { tput setaf 4 ; _log "$@" ; tput sgr0 ; } >> $LOGFILE ; }
+denug() {         { tput setaf 7 ; _log "$@" ; tput sgr0 ; } >> $LOGFILE ; }
+fi
 
-  # echo "  caller 0: $(caller 0)"                >> /tmp/wataash/bashconf.log
-  # echo "  caller 1: $(caller 1)"                >> /tmp/wataash/bashconf.log
-  # echo "  caller 2: $(caller 2)"                >> /tmp/wataash/bashconf.log
-  # echo "  caller 3: $(caller 3)"                >> /tmp/wataash/bashconf.log
-}
+# ------------------------------------------------------------------------------
+# main
 
-wataash::conf::should_source() {
-  wataash::conf::log "Determine whether this script should be sourced or not."
+should_source() {
+  debug
 
+  # BUG
+  # 5.0.7(1)-release:
+  # -bash: /Users/wsh/.bashconf.sh: line 87: conditional binary operator expected
+  # -bash: /Users/wsh/.bashconf.sh: line 87: syntax error near `BASHCONF_SOURCED'
+  # -bash: /Users/wsh/.bashconf.sh: line 87: `  if [[ -v BASHCONF_SOURCED ]]; then'
+  # fixed on bash99
+  #
+  # if [[ -v BASHCONF_SOURCED ]]; then
+  #   warn ".bashconf.sh is already sourced; return 0"
+  #   return 0
+  # fi
+
+  set +u
   if [ -n "$BASHCONF_SOURCED" ]; then
-    wataash::conf::log "~/.bashconf.sh is already sourced.  Return 0."
+    set -u
+    warn ".bashconf.sh is already sourced; return 0"
+    return 0
+  fi
+  set -u
+
+  if [ "$0" = "/etc/gdm3/Xsession" ]; then
+    # at login
+    warn 'from /etc/gdm3/Xsession, logging in? return 0'
     return 0
   fi
 
-  if [ $0 = "/etc/gdm3/Xsession" ]; then
-    wataash::conf::log '$0 = /etc/gdm3/Xsession, Ubuntu Unity (Xorg) login?'
-    wataash::conf::log 'Return 0.'
-    return 0
-  fi
-
-  return 1
-
-  # TODO: cleanup
-
-  # uname_s=$(uname -s)
-  # wataash::conf::log "\$uname_s: $uname_s"
-
-  # # https://unix.stackexchange.com/a/26782/231543
-  # if ! shopt -q login_shell; then
-  #   wataash::conf::log "It's a non-login shell."
-  #   if [ $0 = "/etc/gdm3/Xsession" ]; then
-  #     wataash::conf::log '$0 = /etc/gdm3/Xsession, '
-  #     wataash::conf::log 'New linux Xorg session?  Return 0.'
-  #     return 0
-  #   fi
-  #   wataash::conf::log 'bash on Linux Terminal enulator?  Return 1.'
-  #   return 1
-  # fi
-
-  # Login shell
-
-  # if [ $uname_s = "Darwin" ]; then
-  #   wataash::conf::log "I'm darwin, it seems to be a new terminal. continue."
-  #   return 1
-  # fi
-
-  # if [ -n "$SSH_TTY" ]; then
-  #   wataash::conf::log "It's a SSH session, continue."
-  #   return 1
-  # fi
-
-  # wataash::conf::log "It's a login shell, not an SSH sesssion, and not darwin."
-  # wataash::conf::log "New linux console or Wayland session? should not continue."
-  # return 0
-}
-
-wataash::conf::should_set_env() {
-  wataash::conf::log "Determine whether environment should be set or not."
-
-  if [ "$BASHCONF_NO_ENV" = 1 ]; then
-    wataash::conf::log "\$BASHCONF_NO_ENV is 1, return 0."
-    return 0
-  fi
-
+  debug "return 1"
   return 1
 }
 
-wataash::conf::set_env_path() {
-  wataash::conf::log "Set PATH."
+set_env_path() {
+  debug
 
-  wataash::conf::log "Initial \$PATH: $PATH"
-  wataash::conf::log "Initial \$MANPATH: $MANPATH"
-  wataash::conf::log "Initial \$INFOPATH: $INFOPATH"
-  wataash::conf::log "Initial \$(manpath): $(manpath)"
+  set +u
+  debug "Initial \$PATH: $PATH"
+  debug "Initial \$MANPATH: $MANPATH"
+  debug "Initial \$INFOPATH: $INFOPATH"
+  debug "Initial \$(manpath): $(manpath)"
+  set -u
 
-  # ~/.local/bin/ for binaries installed by pip
+  # cargo
+  p_cargo=$HOME/.cargo/bin
+  m_cargo=
+  i_cargo=
+
+  # dot_local: ~/.local/bin/ for binaries installed by pip
   p_dot_local=$HOME/.local/bin
   m_dot_local=$HOME/.local/share/man
-  i_dot_local=""
-
-  # conda
-  p_conda=""
-  m_conda=""
-  i_conda=""
-  if [ -d ~/anaconda/ ]; then
-    p_conda=$HOME/anaconda/bin
-    m_conda=$HOME/anaconda/share/man
-  elif [ -d ~/miniconda3/ ]; then
-    p_conda=$HOME/miniconda3/bin
-    m_conda=$HOME/miniconda3/share/man
-  fi
+  i_dot_local=
 
   # go
   export GOPATH=$HOME/go
   p_go=$GOPATH/bin
-  m_go=""
-  i_go=""
+  m_go=
+  i_go=
 
   # Home
   p_h=$HOME/usr/bin:$HOME/usr/sbin
   m_h=$HOME/usr/share/man
   i_h=$HOME/usr/share/info
 
-  p_opt=$(       ls -d ~/usr/opt/*/sbin       | tr '\n' :)
-  p_opt=$p_opt:$(ls -d ~/usr/opt/*/bin        | tr '\n' :)
-  m_opt=$m_opt:$(ls -d ~/usr/opt/*/share/man  | tr '\n' :)
-  i_opt=$i_opt:$(ls -d ~/usr/opt/*/share/info | tr '\n' :)
+  # netbsd
+  p_netbsd=$HOME/qc/netbsd/tools/bin
+  m_netbsd=
+  i_netbsd=
+  [ -d "$p_netbsd" ] || p_netbsd=
 
   # node
   # https://docs.npmjs.com/getting-started/fixing-npm-permissions
   # ~/.npmrc
   p_npm=$HOME/.npm-global/bin
-  m_npm=""
-  i_npm=""
+  m_npm=
+  i_npm=
+
+  # opt
+  # note - Use find instead of ls to better handle non-alphanumeric filenames. [SC2012]
+  # shellcheck disable=SC2012
+  p_opt=$(ls -d ~/opt/*/sbin           | tr '\n' :)
+  # shellcheck disable=SC2012
+  p_opt=$p_opt:$(ls -d ~/opt/*/bin     | tr '\n' :)
+  # shellcheck disable=SC2012
+  m_opt=$(ls -d ~/opt/*/share/man      | tr '\n' :)
+  # shellcheck disable=SC2012
+  i_opt=$(ls -d ~/opt/*/share/info     | tr '\n' :)
+
+  # suppress:
+  # ls: cannot access '/home/wsh/usr/opt/*/sbin': No such file or directory
+  # mkdir -p ~/usr/opt/dummy/{bin,sbin,share/man,share/info}/
 
   # os specific
-  if [ $(uname -s) = Darwin ]; then
+  p_os=
+  m_os=
+  i_os=
+  if [ "$(uname -s)" = Darwin ]; then
     # p_os=/usr/local/opt/coreutils/libexec/gnubin:'/Applications/Sublime Text.app/Contents/SharedSupport/bin'
     # don't have to add MANPATHs in $(manpath), such as:
     # /Applications/Xcode.app/Contents/Developer/usr/share/man
@@ -221,223 +179,172 @@ wataash::conf::set_env_path() {
   esac
 
   # ruby
-  p_rb=""
-  m_rb=""
-  i_rb=""
+  p_rb=
+  m_rb=
+  i_rb=
   [ -d ~/.rbenv/bin ] && p_rb=$HOME/.rbenv/bin:$HOME/.rbenv/shims
 
-  export PATH_INIT____=$PATH
-  export MANPATH_INIT_=$MANPATH
-  export INFOPATH_INIT=$INFOPATH
-      PATH="$p_go:$p_rb:$p_npm:$p_h:$p_os:$PATH_INIT____:$p_opt:$p_conda:$p_dot_local"
-   MANPATH="$m_go:$m_rb:$m_npm:$m_h:$m_os:$MANPATH_INIT_:$m_opt:$m_conda:$m_dot_local"
-  INFOPATH="$i_go:$i_rb:$i_npm:$i_h:$i_os:$INFOPATH_INIT:$i_opt:$i_conda:$i_dot_local"
+  set +u
+  PATH_INIT____=$PATH
+  MANPATH_INIT_=$MANPATH
+  INFOPATH_INIT=$INFOPATH
+  set -u
+  # paths likely not conflicting first (e.g. gdb99, nbmake-amd64)
+  # lexicographically
+  PATH____="$p_netbsd:$p_opt"
+  MANPATH_="$m_netbsd:$m_opt"
+  INFOPATH="$i_netbsd:$i_opt"
+  # easy-to-rename binaries next; lexicographically
+  # if it conflicts with built-in commands, just rename it!
+  PATH____="$PATH____:$p_cargo:$p_h:$p_go:$p_rb:$p_dot_local:$p_npm"
+  MANPATH_="$MANPATH_:$m_cargo:$m_h:$m_go:$m_rb:$m_dot_local:$m_npm"
+  INFOPATH="$INFOPATH:$i_cargo:$i_h:$i_go:$i_rb:$i_dot_local:$i_npm"
+  # hard-to-rename (system) binaries and inits last
+  PATH____="$PATH____:$p_os:$PATH_INIT____"
+  MANPATH_="$MANPATH_:$m_os:$MANPATH_INIT_"
+  INFOPATH="$INFOPATH:$i_os:$INFOPATH_INIT"
 
-  wataash::conf::log "\$PATH: $PATH"
-  wataash::conf::log "\$MANPATH: $MANPATH"
-  wataash::conf::log "\$INFOPATH: $INFOPATH"
-  wataash::conf::log "\$(manpath): $(manpath)"
+  debug "\$PATH____: $PATH____"
+  debug "\$MANPATH_: $MANPATH_"
+  debug "\$INFOPATH: $INFOPATH"
+  debug "\$(manpath): $(manpath)"
 
-  # empty PATH (i.e. /bin::/sbin) seems to be equivalent to "."" (i.e. /bin:.:/sbin)
-      PATH=$(echo     $PATH | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
-   MANPATH=$(echo  $MANPATH | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
-  INFOPATH=$(echo $INFOPATH | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
+  # remove empty PATH; it will be "."
+  # i.e. /bin::/sbin -> /bin:.:/sbin
+      PATH=$(echo "$PATH____" | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
+   MANPATH=$(echo "$MANPATH_" | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
+  INFOPATH=$(echo "$INFOPATH" | sed -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/::/:/g -e s/^:// -e s/:$//)
 
-  wataash::conf::log "\$PATH (after sed): $PATH"
-  wataash::conf::log "\$MANPATH (after sed): $MANPATH"
-  wataash::conf::log "\$INFOPATH (after sed): $INFOPATH"
+  debug "\$PATH (after sed): $PATH"
+  debug "\$MANPATH (after sed): $MANPATH"
+  debug "\$INFOPATH (after sed): $INFOPATH"
 
   export PATH MANPATH INFOPATH
 }
 
-wataash::conf::set_env() {
-  wataash::conf::log "Set environment variables."
+set_env() {
+  debug
 
-  wataash::conf::should_set_env
-  if [ $? -eq 0 ]; then
-    wataash::conf::log "should_set_env() returned 0.  Return."
-    return
-  fi
+  set_env_path
 
-  wataash::conf::set_env_path
-
-  # fzf
-  export FZF_DEFAULT_OPTS=--multi
-
-  # go
-  # export GOENV_ROOT=$HOME/.goenv
-  # export GOPATH=$HOME/go  # must be before setting PATH
+  # # fzf
+  # export FZF_DEFAULT_OPTS=--multi
 
   # keychain
-  eval $(keychain -q --eval --inherit any)
-  ssh-add
+  eval "$(keychain -q --eval --inherit any)"
+  ssh-add 2>&1 | grep -v 'Identity added: '
   # confirm:
   #  ssh-add -l
   #  ssh -A some-host 'ssh-add -l'
 
-  # less
-  # https://wiki.archlinux.org/index.php/Color_output_in_console#man
-  # doesn't work.
-  # export LESS_TERMCAP_md "$(printf \e[01;31m)"
-  # export LESS_TERMCAP_me "$(printf \e[0m)"
-  # export LESS_TERMCAP_se "$(printf \e[0m)"
-  # export LESS_TERMCAP_so "$(printf \e[01;44;33m)"
-  # export LESS_TERMCAP_ue "$(printf \e[0m)"
-  # export LESS_TERMCAP_us "$(printf \e[01;32m)"
-
   # z
   # https://github.com/oh-my-fish/plugin-z
   export Z_SCRIPT_PATH=$HOME/usr/bin/z.sh
-  if [ $(uname -s) = Darwin ]; then
+  if [ "$(uname -s)" = Darwin ]; then
     export Z_SCRIPT_PATH=$(brew --prefix)/etc/profile.d/z.sh
   fi
 
-  wataash::conf::log "Return."
+  debug "return 0"
 }
 
-wataash::conf::is_interactive() {
-  wataash::conf::log "Determine whether this bash is interactive or not."
+# *0* if interactive
+is_interactive() {
+  debug
 
-  # bash(1) - INVOCATION
   # https://www.gnu.org/software/bash/manual/html_node/Is-this-Shell-Interactive_003f.html
   if [ -n "$PS1" ]; then
-    wataash::conf::log "PS1 is set, interactive mode.  Return 1."
+    debug "interactive"
+    return 0
+  fi
+
+  if [[ $SHELLOPTS == *emacs* ]]; then
+    # found by print `env` and `set`
+    info "emacs on Ubuntu; not interactive"
     return 1
   fi
 
-  if [[ SHELLOPTS == *emacs* ]]; then
-    # found by print `env` and `set`.
-    wataash::conf::log "SHELLOPTS includes \"emacs\".  emacs on Ubuntu."
-    wataash::conf::log "Return 0."
-    return 0
-  fi
-
   if [[ $XPC_SERVICE_NAME == org.gnu.Emacs.* ]]; then
-    # on Darwin emacs
-    wataash::conf::log "XPC_SERVICE_NAME starts with \"org.gnu.Emacs.\"."
-    # 0?
-    wataash::conf::log "emacs on macOS.  Return 0."
-    return 0
+    info "emacs on macOS; not interactive"
+    return 1
   fi
 
-  if [[ $TERM == dumb ]]; then
+  if [ "$TERM" = dumb ]; then
     # TODO what it difference with above? GUI and -nw ?
     # 0?
-    wataash::conf::log "TERM is \"dump\".  emacs on macOS.  Return 0."
-    return 0
-  fi
-}
-
-#######################################
-# description here
-# Globals:
-#   None
-# Arguments:
-#   None
-# Returns:
-#   1 if should run
-#   0 if not
-#######################################
-wataash::conf::should_run_fish() {
-  wataash::conf::log "Determine whether we should run fish or not."
-
-  if [ "$BASHCONF_NO_FISH" = 1 ]; then
-    wataash::conf::log "\$BASHCONF_NO_FISH is 1, return 0."
+    info "emacs on macOS (dumb); not interactive"
     return 0
   fi
 
-  wataash::conf::is_interactive
-  if [ $? -eq 0 ]; then
-    wataash::conf::log "It's not interactive shell.  Return 0."
-    return 0
-  fi
-
-  wataash::conf::log "Return 1."
+  warn "unknown; non-interactive?"
   return 1
 }
 
-wataash::conf::run_fish() {
-  wataash::conf::log "Run fish."
+# *0* if should run
+should_run_fish() {
+  debug
 
-  wataash::conf::should_run_fish
-  if [ $? -eq 0 ]; then
-    # 234: no meaning
-    wataash::conf::log "wataash::conf::should_run_fish returned 0.  Return 234."
-    return 234
+  if ! is_interactive; then
+    info "not interactive shell; should not"
+    return 1
   fi
 
-  wataash::conf::log "Run it!"
-  fish
-  rc=$?
-  if [ $rc -ne 0 ] ; then
-    wataash::conf::log "fish exited with $rc.  Return it."
-  return $rc
-  fi
-
-  wataash::conf::log "fish exited with 0.  Return 0."
+  debug "shoud run"
   return 0
 }
 
-#######################################
-# Set PATH.
-# Globals:
-#   None
-# Arguments:
-#   None
-# Returns:
-#   None
-#######################################
-wataash::conf::main() {
-  wataash::conf::log "--------------------------------------------------"
-  wataash::conf::log "Loading ~/.bashconf.sh"
-  wataash::conf::log "caller: $(caller)"
-  wataash::conf::log "\$0: $0"
-  wataash::conf::log "\$@: $@"
-  
-  wataash::conf::should_source
-  if [ $? -eq 0 ]; then
-    wataash::conf::log "should_source() returned 0.  Return."
-    return;
+run_fish() {
+  debug
+
+  if ! should_run_fish; then
+    # 234: no meaning; just to aware that "234" is from bashconf.sh
+    info "return 234"
+    return 234
   fi
 
-  wataash::conf::log "export BASHCONF_SOURCED=1"
+  info "run it!"
+  fish
+  rc=$?
+  if [ $rc -ne 0 ] ; then
+    info "fish exited with $rc; stty sane and return it"
+  stty sane
+  return $rc
+  fi
+
+  debug "fish exited with 0.  Return 0."
+  return 0
+}
+
+main() {
+  mkdir -p /tmp/wataash/
+  export TERM=xterm-256color  # for tput in not a tty
+  debug
+
+  info "loading .bashconf.sh"
+  debug "\$0: $0"
+  debug "\$@: $*"
+
+  if should_source; then
+    info "should_source() returned 0; return 0"
+    return 0
+  fi
+
+  debug "export BASHCONF_SOURCED=1"
   export BASHCONF_SOURCED=1
 
-  wataash::conf::set_env
+  set_env
 
-  wataash::conf::run_fish
+  run_fish
   ret=$?
   if [ $ret -ne 0 ]; then
-    # 234: no meaning
-    wataash::conf::log "run_fish() returned $ret.  Return it."
+    info "run_fish() returned $ret; return it"
     return $ret
   fi
 
-  wataash::conf::log  "run_fish() returned 0.  exit 0."
+  info  "run_fish() returned 0; exit 0"
   exit 0
 }
 
-wataash::conf::main
+main
+debug "end of .bashconf.sh"
 
-# -----------------------------------------------------------------------------
-wataash::conf::__memo() {
-  if ! do_something; then
-    wataash::conf::err "Unable to do_something"
-    exit "${E_DID_NOTHING}"
-  fi
-
-  if [ -n "$DEBUG" ]; then
-    zenity --info --text="env: $(env)"
-  fi
-
-  if [ -n "$DEBUG" ]; then
-    zenity --info --text="set: $(set)"
-  fi
-
-  case "$(uname -v)" in
-    *Ubuntu*) zenity --info --text='loading .bashrc' ;;
-    *) echo 'loading .bashrc' ;;
-  esac
-
-  [ -n "$DEBUG_GUI" ] && { export DEBUG=1; }
-}
+set +u
