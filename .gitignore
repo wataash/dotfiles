@@ -1,112 +1,39 @@
-# Ignore all
 *
 
-# ----------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # White list
-!/.gitignore
-!/.gitignore_global
 
-!/.atom/
-!/.atom/init.coffee
-!/.bashconf.sh
 !/.config/
-!/.config/autostart/
-!/.config/autostart/easystroke.desktop
 !/.config/fish/
-!/.config/fish/config.fish
-!/.config/fish/config_abbr.fish
-!/.config/fish/config_depr.fish
-!/.config/fish/functions/_substitute_command.fish
-!/.config/fish/functions/ca.fish
-!/.config/fish/functions/cda.fish
-!/.config/fish/functions/condactivate.fish
-!/.config/fish/functions/condalist.fish
-!/.config/fish/functions/deactivate.fish
-!/.config/fish/functions/diff.fish
-!/.config/fish/functions/find_mod_dconf.fish
-!/.config/fish/functions/find_mod_dir.fish
-!/.config/fish/functions/findname.fish
-!/.config/fish/functions/fish_user_key_bindings.fish
-!/.config/fish/functions/funces.fish
-!/.config/fish/functions/gvm.fish
-!/.config/fish/functions/j.fish
-!/.config/htop/
-!/.config/htop/htoprc_darwin
-!/.config/htop/htoprc_linux
-!/.config/htop/htoprc_netbsd
-!/.config/karabiner/
-!/.config/karabiner/assets/
-!/.config/karabiner/assets/complex_modifications/
-!/.config/karabiner/assets/complex_modifications/*.json
-!/.config/karabiner/karabiner.json
-!/.config/mimeapps.list
-# symlink to ~/.vim/
-!/.config/nvim
-!/.config/sublime-text-3/
-!/.config/sublime-text-3/Packages/
-!/.config/sublime-text-3/Packages/User/
-!/.config/sublime-text-3/Packages/User/Package\ Control.sublime-settings
-!/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
+!/.config/fish/*
+!/.config/fish/functions/
+!/.config/fish/functions/*
 !/.config/terminator/
 !/.config/terminator/*
 !/.easystroke/
 !/.easystroke/*
-!/.gdbinit
-!/.gdbinit.py
-!/.gnus.el
-!/.ispell_english
-!/.mozc/
-!/.mozc/config1.db
-!/.mozc/user_dictionary.db
-!/.offlineimaprc
-!/.signature
-!/.spacemacs.git
-!/.spacemacs.mu4e.el
-!/.tigrc.git
-!/.tmux.conf
-!/.vim/
-!/.vim/autoload/
-!/.vim/autoload/plug.vim
-# symlink to ~/.vimrc, for neovim
-!/.vim/init.vim
-!/.vimrc.git
-!/.xbindkeysrc
 
-!/Library/
-!/Library/Application\ Support/
-!/Library/Application\ Support/Code/
-!/Library/Application\ Support/Code/User/
-!/Library/Application\ Support/Code/User/settings.json
-!/Library/Application\ Support/Karabiner/
-!/Library/Application\ Support/Karabiner/private.xml
-!/Library/Application\ Support/Sublime\ Text\ 3/
-!/Library/Application\ Support/Sublime\ Text\ 3/Packages/
-!/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/
-!/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/hex_viewer.sublime-settings
-!/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Package\ Control.sublime-settings
-!/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
+!/doc/
+!/doc/**
 !/src/
-!/src/README.md
-!/usr/
-!/usr/bin/
-!/usr/bin/aglang
-!/usr/bin/emacsclient-nw
-!/usr/bin/hsync
-!/usr/etc/
-!/usr/etc/dhcp/
-!/usr/etc/dhcp/*
-!/usr/share/
-!/usr/share/doc/
-!/usr/share/doc/*
-!/usr/share/lic/
-!/usr/share/lic/*
-!/usr/share/X11/
-!/usr/share/X11/xkb/
-!/usr/share/X11/xkb/symbols/
-!/usr/share/X11/xkb/symbols/*
 
-# ----------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Black list
 
-/usr/share/doc/*.swp
-/usr/share/doc/*~
+/.config/fish/fish_variables
+/.config/fish/fishfile
+/.config/fish/functions/__bass.py
+/.config/fish/functions/__fasd_print_completion.fish
+/.config/fish/functions/a.fish
+/.config/fish/functions/bass.fish
+/.config/fish/functions/d.fish
+/.config/fish/functions/f.fish
+/.config/fish/functions/fasd_cd.fish
+/.config/fish/functions/fisher.fish
+/.config/fish/functions/peco_kill.fish
+/.config/fish/functions/peco_select_history.fish
+/.config/fish/functions/s.fish
+/.config/fish/functions/sd.fish
+/.config/fish/functions/sf.fish
+/.config/fish/functions/z.fish
+/.config/fish/functions/zz.fish
