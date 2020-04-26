@@ -12,9 +12,10 @@
 !/.config/terminator/*
 !/.easystroke/
 !/.easystroke/*
-
 !/doc/
 !/doc/**
+!/sh/
+!/sh/**
 !/src/
 
 # ------------------------------------------------------------------------------
@@ -27,6 +28,7 @@
 /.config/fish/functions/a.fish
 /.config/fish/functions/bass.fish
 /.config/fish/functions/d.fish
+/.config/fish/functions/docker.fish
 /.config/fish/functions/f.fish
 /.config/fish/functions/fasd_cd.fish
 /.config/fish/functions/fisher.fish
@@ -37,3 +39,4 @@
 /.config/fish/functions/sf.fish
 /.config/fish/functions/z.fish
 /.config/fish/functions/zz.fish
+/doc/**/.idea/
